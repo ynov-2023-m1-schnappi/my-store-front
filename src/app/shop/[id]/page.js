@@ -178,23 +178,23 @@ export default function Page() {
             </div>
             <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                 <div className="flex flex-col items-center justify-center space-y-4 w-full h-full overflow-y-scroll">
-                    <p className=" text-center mt-12 text-slate-500 font-semibold text-lg w-full h-full mt-12">
+                    <p className=" text-center mt-12 text-slate-500 font-semibold text-lg w-full h-full mt-8">
                         Please fill the form below</p>
-                    <form className="flex flex-col space-y-4 w-full h-full p-8" onSubmit={handleOnSubmit}>
+                        {error && ( <Alert message={error.message} type="error" /> )}
+                    <form className="flex flex-col space-y-4 w-full h-full p-8 items-center sm:p-2" onSubmit={handleOnSubmit}>
                         <label className="flex flex-col space-y-1">
                             <span className="text-sm font-semibold">Name</span>
-                        <input className="border border-gray-300 p-2 w-full focus:outline-none focus:border-slate-500" type="text" placeholder="Name" onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                            <input className="border border-gray-300 p-2 w-full focus:outline-none focus:border-slate-500" type="text" placeholder="Name" onChange={(e) => setForm({ ...form, name: e.target.value })} />
                         </label>
                         <label className="flex flex-col space-y-1">
                             <span className="text-sm font-semibold">Last name</span>
-                        <input className="border border-gray-300 p-2 focus:outline-none focus:border-slate-500" type="text" placeholder="Last name" onChange={(e) => setForm({ ...form, last_name: e.target.value })} />
+                            <input className="border border-gray-300 p-2 focus:outline-none focus:border-slate-500" type="text" placeholder="Last name" onChange={(e) => setForm({ ...form, last_name: e.target.value })} />
                         </label>
                         <label className="flex flex-col space-y-1">
                             <span className="text-sm font-semibold">Email</span>
-                        <input className="border border-gray-300 p-2 focus:outline-none focus:border-slate-500" type="email" placeholder="Email" onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                            <input className="border border-gray-300 p-2 focus:outline-none focus:border-slate-500" type="email" placeholder="Email" onChange={(e) => setForm({ ...form, email: e.target.value })} />
                         </label>
-                        <button className="mt-4 inline-flex items-center px-4 py-3 text-sm border border-slate-500 font-medium text-center text-slate-500 bg-white hover:bg-slate-500 hover:text-white" type="submit"> Submit </button>
-
+                        <button className="mt-4 inline-flex items-center px-4 py-3 text-sm border border-slate-500 font-medium text-center text-slate-500 bg-white hover:bg-slate-500 hover:text-white" type="submit">Submit</button>
                     </form>
                     
 
