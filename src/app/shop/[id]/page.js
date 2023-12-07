@@ -9,6 +9,8 @@ import ProductFancyBox from "@/components/products/ProductFancyBox";
 import Loader from "@/components/UI/Loader";
 import Alert from "@/components/UI/Alert";
 import { getBase64 } from '../../../lib/base64';
+import Link from 'next/link';
+import Modal from '@/components/modal';
 
 export default function Page() {
 
@@ -20,6 +22,32 @@ export default function Page() {
     const [slideIndex, setSlideIndex] = useState(0);
     const [showFancyBox, setShowFancyBox] = useState(false);
     const [error, setError] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [form, setForm] = useState({
+        name: '',
+        last_name: '',
+        email: '',
+    });
+
+    const handleOnSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3033/listInterested', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -143,8 +171,35 @@ export default function Page() {
                     <TitlePage title={product.name} />
                     <p className="mb-3 font-semibold text-lg">{product.price} €</p>
                     <p className="leading-7">{product.description}</p>
+                    <Link className='mt-4 inline-flex items-center px-4 py-3 text-sm border border-slate-500 font-medium text-center text-slate-500 bg-white hover:bg-slate-500 hover:text-white' href={`/shop/${product.id}`} onClick={() => { setShowModal(true) }}>
+                        I am interested
+                    </Link>
                 </div>
             </div>
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                <div className="flex flex-col items-center justify-center space-y-4 w-full h-full overflow-y-scroll">
+                    <p className=" text-center mt-12 text-slate-500 font-semibold text-lg w-full h-full mt-8">
+                        Please fill the form below</p>
+                        {error && ( <Alert message={error.message} type="error" /> )}
+                    <form className="flex flex-col space-y-4 w-full h-full p-8 items-center sm:p-2" onSubmit={handleOnSubmit}>
+                        <label className="flex flex-col space-y-1">
+                            <span className="text-sm font-semibold">Name</span>
+                            <input className="border border-gray-300 p-2 w-full focus:outline-none focus:border-slate-500" type="text" placeholder="Name" onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                        </label>
+                        <label className="flex flex-col space-y-1">
+                            <span className="text-sm font-semibold">Last name</span>
+                            <input className="border border-gray-300 p-2 focus:outline-none focus:border-slate-500" type="text" placeholder="Last name" onChange={(e) => setForm({ ...form, last_name: e.target.value })} />
+                        </label>
+                        <label className="flex flex-col space-y-1">
+                            <span className="text-sm font-semibold">Email</span>
+                            <input className="border border-gray-300 p-2 focus:outline-none focus:border-slate-500" type="email" placeholder="Email" onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                        </label>
+                        <button className="mt-4 inline-flex items-center px-4 py-3 text-sm border border-slate-500 font-medium text-center text-slate-500 bg-white hover:bg-slate-500 hover:text-white" type="submit">Submit</button>
+                    </form>
+                    
+
+                </div>
+            </Modal>
         </div>
     );
 }
