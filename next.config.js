@@ -6,6 +6,7 @@ const nextConfig = {
             "127.0.0.1",
             process.env.NEXT_PUBLIC_BACKEND_URL,
         ],
+        
     },
 }
 

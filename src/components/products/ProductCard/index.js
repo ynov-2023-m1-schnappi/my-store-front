@@ -6,22 +6,7 @@ const Index = ({ product }) => {
         <div className="group/card max-w-sm bg-white rounded-lg">
             <Link className="group/thumbnail thumbnail" href={`/shop/${product.id}`}>
                 <div className="overflow-hidden w-[300px] h-[300px] relative">
-                    <Image
-                        className="group-hover/thumbnail:opacity-100 group-hover/thumbnail:scale-105 transition ease-in-out delay-150"
-                        alt={product.name}
-                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${product.thumbnail}`}
-                        fill
-                        sizes="100%"
-                        style={{ objectFit: "cover" }}
-                    />
-                    <Image
-                        className="opacity-100 group-hover/thumbnail:scale-105 group-hover/thumbnail:opacity-0 transition ease-in-out delay-150"
-                        alt={product.name}
-                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${product.packshot}`}
-                        fill
-                        sizes="100%"
-                        style={{ objectFit: "cover" }}
-                    />
+                    <img src={`https://my-store-ynov.s3.eu-north-1.amazonaws.com/${product.image_path}`}/>
                 </div>
             </Link>
             <div className="py-5">
