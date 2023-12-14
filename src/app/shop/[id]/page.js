@@ -24,15 +24,17 @@ export default function Page() {
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [form, setForm] = useState({
+        id_product: id,
         name: '',
         last_name: '',
         email: '',
+        product_name: '',
     });
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3033/listInterested', {
+            const response = await fetch('http://localhost:3033/interest', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,7 +42,15 @@ export default function Page() {
                 body: JSON.stringify(form)
             });
             const data = await response.json();
-            console.log(data);
+
+            if (data.success) { 
+                setError(null);
+                setShowModal(false);
+            }
+            else {
+                console.log(data);
+                setError(data.error);
+            }     
         }
         catch (err) {
             console.log(err);
@@ -56,6 +66,7 @@ export default function Page() {
                 let product = await getProduct(id);
                 if (product) {
                     setProduct(product.data);
+                    setForm({ ...form, product_name: product.data.name});
                 }
             }
             catch (err) {
@@ -171,7 +182,7 @@ export default function Page() {
                     <TitlePage title={product.name} />
                     <p className="mb-3 font-semibold text-lg">{product.price} €</p>
                     <p className="leading-7">{product.description}</p>
-                    <Link className='mt-4 inline-flex items-center px-4 py-3 text-sm border border-slate-500 font-medium text-center text-slate-500 bg-white hover:bg-slate-500 hover:text-white' href={`/shop/${product.id}`} onClick={() => { setShowModal(true) }}>
+                    <Link className='mt-4 inline-flex items-center px-4 py-3 text-sm border border-slate-500 font-medium text-center text-slate-500 bg-white hover:bg-slate-500 hover:text-white' href={`/shop/${product.id}`} onClick={() => { setShowModal(true),setError(null) }}>
                         I am interested
                     </Link>
                 </div>
@@ -180,7 +191,7 @@ export default function Page() {
                 <div className="flex flex-col items-center justify-center space-y-4 w-full h-full overflow-y-scroll">
                     <p className=" text-center mt-12 text-slate-500 font-semibold text-lg w-full h-full mt-8">
                         Please fill the form below</p>
-                        {error && ( <Alert message={error.message} type="error" /> )}
+                        {error && ( <h3 className="text-red-500 text-center">{error}</h3>)}
                     <form className="flex flex-col space-y-4 w-full h-full p-8 items-center sm:p-2" onSubmit={handleOnSubmit}>
                         <label className="flex flex-col space-y-1">
                             <span className="text-sm font-semibold">Name</span>
@@ -196,8 +207,6 @@ export default function Page() {
                         </label>
                         <button className="mt-4 inline-flex items-center px-4 py-3 text-sm border border-slate-500 font-medium text-center text-slate-500 bg-white hover:bg-slate-500 hover:text-white" type="submit">Submit</button>
                     </form>
-                    
-
                 </div>
             </Modal>
         </div>
