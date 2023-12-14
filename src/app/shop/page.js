@@ -51,9 +51,12 @@ export default function Page({ searchParams }) {
     };
     const applyFilter = (priceRange) => {
         setFilterMenuIsOpen(false);
+        getFilteredProducts(priceRange);
         setPriceRange(priceRange);
         console.log(priceRange);
     };
+
+    const getFilteredProducts = async (priceRange) => {};
     if (!products.data || products.success === false)
         return <Alert message={products.message} type="error" />;
 
