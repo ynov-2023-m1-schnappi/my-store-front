@@ -42,6 +42,7 @@ export default function Page() {
                 body: JSON.stringify(form)
             });
             const data = await response.json();
+
             if (data.success) { 
                 setError(null);
                 setShowModal(false);
@@ -49,16 +50,10 @@ export default function Page() {
             else {
                 console.log(data);
                 setError(data.error);
-            }
-
-
-            
-            
-            
+            }     
         }
         catch (err) {
             console.log(err);
-            
         }
     }
 
