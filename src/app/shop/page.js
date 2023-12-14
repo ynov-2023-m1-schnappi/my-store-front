@@ -17,7 +17,6 @@ export default function Page({ searchParams }) {
     const handleFilterMenuClose = () => {
         setFilterMenuIsOpen(false);
     };
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,6 +31,8 @@ export default function Page({ searchParams }) {
                 );
                 const products = await res.json();
                 setProducts(products);
+                console.log("PREMIER FETCH");
+                console.log(products);
                 const pricesArray = products.data.map(
                     (product) => product.price
                 );
@@ -42,10 +43,6 @@ export default function Page({ searchParams }) {
         };
         fetchData();
     }, []);
-
-    useEffect(() => {
-        console.log(Math.max(...prices));
-    }, [prices]);
     const handleFilterClick = () => {
         setFilterMenuIsOpen(true);
     };
@@ -56,7 +53,18 @@ export default function Page({ searchParams }) {
         console.log(priceRange);
     };
 
-    const getFilteredProducts = async (priceRange) => {};
+    const getFilteredProducts = async (priceRange) => {
+        await fetch("http://127.0.0.1:3000/filteredProducts", {
+            method: "POST",
+            body: JSON.stringify(priceRange),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                setProducts(data);
+            })
+            .catch((err) => console.log(err));
+    };
     if (!products.data || products.success === false)
         return <Alert message={products.message} type="error" />;
 
