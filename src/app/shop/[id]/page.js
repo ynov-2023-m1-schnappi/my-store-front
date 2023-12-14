@@ -48,16 +48,13 @@ export default function Page() {
                 setShowModal(false);
             }
             else {
-                console.log(data);
                 setError(data.error);
             }     
         }
         catch (err) {
-            console.log(err);
+            console.log(err.message);
         }
     }
-
-
 
     useEffect(() => {
         const fetchProduct = async () => {
