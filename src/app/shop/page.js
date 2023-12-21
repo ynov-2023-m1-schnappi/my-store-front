@@ -54,7 +54,7 @@ export default function Page({ searchParams }) {
     };
 
     const getFilteredProducts = async (priceRange) => {
-        await fetch("http://127.0.0.1:3000/filteredProducts", {
+        await fetch("http://localhost:4242/filteredProducts", {
             method: "POST",
             body: JSON.stringify(priceRange),
         })
