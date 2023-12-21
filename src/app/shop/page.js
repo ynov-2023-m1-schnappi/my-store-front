@@ -14,9 +14,6 @@ export default function Page({ searchParams }) {
     const { take = 8 } = searchParams || {};
     const [filterMenuIsOpen, setFilterMenuIsOpen] = useState(false);
     const [products, setProducts] = useState([]);
-    const handleFilterMenuClose = () => {
-        setFilterMenuIsOpen(false);
-    };
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -46,13 +43,18 @@ export default function Page({ searchParams }) {
     const handleFilterClick = () => {
         setFilterMenuIsOpen(true);
     };
-    const applyFilter = (priceRange) => {
+    const handleFilterMenuClose = () => {
         setFilterMenuIsOpen(false);
-        getFilteredProducts(priceRange);
-        setPriceRange(priceRange);
-        console.log(priceRange);
     };
-
+    const addFilterInDB = async (priceRange) => {
+        prices = { priceMin: priceRange[0], priceMax: priceRange[1] };
+        await fetch("http://localhost:3030/addFilterInDB", {
+            method: "POST",
+            body: JSON.stringify(prices),
+        })
+            .then((res) => res.json())
+            .catch((err) => console.log(err));
+    };
     const getFilteredProducts = async (priceRange) => {
         await fetch("http://localhost:4242/filteredProducts", {
             method: "POST",
@@ -65,6 +67,15 @@ export default function Page({ searchParams }) {
             })
             .catch((err) => console.log(err));
     };
+
+    const applyFilter = (priceRange) => {
+        setFilterMenuIsOpen(false);
+        getFilteredProducts(priceRange);
+        addFilterInDB(priceRange);
+        setPriceRange(priceRange);
+        console.log(priceRange);
+    };
+
     if (!products.data || products.success === false)
         return <Alert message={products.message} type="error" />;
 
